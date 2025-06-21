@@ -15,8 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+from theatre_app import views  
+from django.http import JsonResponse
+
+def home_view(request):
+    return JsonResponse({"message": "Welcome to the Theatre API!"})
 
 urlpatterns = [
+    path('', home_view),
     path('admin/', admin.site.urls),
+    path('api/', include('theatre_app.urls')),
+    path('auth/token/', obtain_auth_token, name='api_token_auth'),
+    path('auth/register/', views.RegisterView.as_view(), name='register'),
+
 ]
